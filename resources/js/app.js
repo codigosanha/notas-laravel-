@@ -7,7 +7,8 @@
 require('./bootstrap');
 
 import Vue from 'vue';
-import VueRouter from 'vue-router'
+import VueRouter from 'vue-router';
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -30,10 +31,11 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 import vDashboard from './views/Dashboard.vue';
+import vPeriodos from './views/Periodos.vue';
 
 const routes = [
   { path: '/dashboard', component: vDashboard },
-  { path: '/bar', component: require('./views/Dashboard') }
+  { path: '/periodos', component: vPeriodos }
 ];
 
 const router = new VueRouter({

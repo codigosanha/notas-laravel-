@@ -2,10 +2,10 @@
    
     <div class="card">
 	   	<div class="card-header">
-	    	Dashboard
+	    	Periodos
 	  	</div>
 	  	<div class="card-body">
-	    	<h5 class="card-title">Información del dashboard</h5>
+	    	<h5 class="card-title">Listado de Periodos</h5>
 	    	
 	  	</div>
 	</div>
