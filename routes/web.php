@@ -21,3 +21,5 @@ Route::get('/', function () {
 Route::get('/admin', function(){
 	return view('template');
 });
+
+Route::resource("periodos", "PeriodosController");
