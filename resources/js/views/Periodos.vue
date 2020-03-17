@@ -8,7 +8,7 @@
 		  		<button type="button" class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#exampleModal">
 				  	Agregar Periodo
 				</button>
-				<b-button v-b-modal.modal-1>Launch demo modal</b-button>
+				<b-button v-b-modal.modal-prevent-closing>Launch demo modal</b-button>
 	
 				<table class="table table-bordered">
 					<thead>
@@ -68,9 +68,47 @@
 		    	</div>
 		  	</div>
 		</div>
-		<b-modal id="modal-1" title="BootstrapVue">
-		    <p class="my-4">Hello from modal!</p>
-		</b-modal>
+		<b-modal
+	      	id="modal-prevent-closing"
+	      	ref="modal"
+	      	title="Submit Your Name"
+	      	@show="resetModal"
+	      	@hidden="resetModal"
+	      	@ok="handleOk"
+	      	hide-footer
+	    >
+	      	 <b-form @submit.stop.prevent="onSubmit">
+      <b-form-group id="example-input-group-1" label="Name" label-for="example-input-1">
+        <b-form-input
+          id="example-input-1"
+          name="example-input-1"
+          v-model="$v.form.name.$model"
+          :state="validateState('name')"
+          aria-describedby="input-1-live-feedback"
+        ></b-form-input>
+
+        <b-form-invalid-feedback
+          id="input-1-live-feedback"
+        >This is a required field and must be at least 3 characters.</b-form-invalid-feedback>
+      </b-form-group>
+
+      <b-form-group id="example-input-group-2" label="Food" label-for="example-input-2">
+        <b-form-select
+          id="example-input-2"
+          name="example-input-2"
+          v-model="$v.form.food.$model"
+          :options="foods"
+          :state="validateState('food')"
+          aria-describedby="input-2-live-feedback"
+        ></b-form-select>
+
+        <b-form-invalid-feedback id="input-2-live-feedback">This is a required field.</b-form-invalid-feedback>
+      </b-form-group>
+
+      <b-button type="submit" variant="primary">Submit</b-button>
+      <b-button class="ml-2" @click="resetForm()">Reset</b-button>
+    </b-form>
+	    </b-modal>
 	</div>
 </template>
 
@@ -78,7 +116,12 @@
 
 	import { es } from 'vuejs-datepicker/dist/locale';
 	import Datepicker from 'vuejs-datepicker';
+	import { validationMixin } from "vuelidate";
+	import { required, minLength } from "vuelidate/lib/validators";
+
+
 	export default {
+		mixins: [validationMixin],
 		data(){
 			return {
 				DatePickerFormat: 'yyyy',
@@ -86,12 +129,41 @@
 				title_modal: 'Registrar Periodo',
 				periodos:[],
 				anio:'',
-				numero:'',
+				numero:null,
 				defaultDate: new Date(),
-				periodo_actual: true
+				periodo_actual: true,
+				name: '',
+        		nameState: null,
+        		submittedNames: [],
+        		numeros: [
+		          { value: null, text: 'Please select an option' },
+		          { value: 'I', text: 'I' },
+		          { value: 'II', text: 'II' },
+		        ],
+		        foods: [
+			        { value: null, text: "Choose..." },
+			        { value: "apple", text: "Apple" },
+			        { value: "orange", text: "Orange" }
+			    ],
+			    form: {
+			        name: null,
+			        food: null
+			    }
 
 			}
 		},
+
+		validations: {
+		    form: {
+		      food: {
+		        required
+		      },
+		      name: {
+		        required,
+		        minLength: minLength(3)
+		      }
+		    }
+		  },
 		methods:{
 			getPeriodos: function(){
 				axios.get('/periodos')
@@ -116,7 +188,56 @@
 				}).catch(error=>{
 					console.log(error);
 				});
-		    }
+		    },
+		     checkFormValidity() {
+		        const valid = this.$refs.form.checkValidity()
+		        this.nameState = valid
+		        return valid
+		      },
+		      resetModal() {
+		        this.name = ''
+		        this.nameState = null
+		      },
+		      handleOk(bvModalEvt) {
+		        // Prevent modal from closing
+		        bvModalEvt.preventDefault()
+		        // Trigger submit handler
+		        this.handleSubmit()
+		      },
+		      handleSubmit() {
+		        // Exit when the form isn't valid
+		        if (!this.checkFormValidity()) {
+		          return
+		        }
+		        // Push the name to submitted names
+		        this.submittedNames.push(this.name)
+		        // Hide the modal manually
+		        this.$nextTick(() => {
+		          this.$bvModal.hide('modal-prevent-closing')
+		        })
+		      },
+		       validateState(name) {
+			      const { $dirty, $error } = this.$v.form[name];
+			      return $dirty ? !$error : null;
+			    },
+			    resetForm() {
+			      this.form = {
+			        name: null,
+			        food: null
+			      };
+
+			      this.$nextTick(() => {
+			        this.$v.$reset();
+			      });
+			    },
+			    onSubmit() {
+			      this.$v.form.$touch();
+			      if (this.$v.form.$anyError) {
+			        return;
+			      }
+			      alert("Form submitted!");
+			  }
+
 			
 		},
 	
