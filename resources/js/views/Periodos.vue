@@ -5,10 +5,18 @@
 		    	Periodos
 		  	</div>
 		  	<div class="card-body">
-		  		<button type="button" class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#exampleModal">
-				  	Agregar Periodo
-				</button>
-				<b-button v-b-modal.modal-prevent-closing>Launch demo modal</b-button>
+		  		<!-- <button type="button" class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#exampleModal">
+		  						  	Agregar Periodo
+		  						</button> -->
+		  		<b-row class="mb-2">
+		  			<b-col>
+			  			
+					    <b-button v-b-modal.modal-prevent-closing>Agregar Périodo</b-button>
+				    	
+				    </b-col>
+				</b-row>
+
+				
 	
 				<table class="table table-bordered">
 					<thead>
@@ -32,7 +40,7 @@
 		    	
 		  	</div>
 		</div>
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  	<div class="modal-dialog" role="document">
 		    	<div class="modal-content">
 		      		<div class="modal-header">
@@ -57,7 +65,7 @@
 			        	</div>
 			        	<div class="form-group">
 			        		<label class="checkbox-inline"><input type="checkbox" v-model="periodo_actual" :true-value="true"
-  							:false-value="false">Marcar como Activo</label>
+		  							:false-value="false">Marcar como Activo</label>
 			        	</div>
 			      	</div>
 			      	<div class="modal-footer">
@@ -67,7 +75,7 @@
 			      	</form>
 		    	</div>
 		  	</div>
-		</div>
+		</div> -->
 		<b-modal
 	      	id="modal-prevent-closing"
 	      	ref="modal"
@@ -77,37 +85,43 @@
 	      	@ok="handleOk"
 	      	hide-footer
 	    >
-	      	 <b-form @submit.stop.prevent="onSubmit">
-      <b-form-group id="example-input-group-1" label="Name" label-for="example-input-1">
-        <b-form-input
-          id="example-input-1"
-          name="example-input-1"
-          v-model="$v.form.name.$model"
-          :state="validateState('name')"
-          aria-describedby="input-1-live-feedback"
-        ></b-form-input>
+	      	<b-form @submit.stop.prevent="onSubmit">
+			    <b-form-group id="example-input-group-1" label="Año" label-for="example-input-1">
+			        <datepicker :language="es" :format="DatePickerFormat" minimum-view="year" :bootstrap-styling="true"  v-model="form.defaultDate" @closed="convertDate" :state="validateState('defaultDate')" aria-describedby="defaultDate"></datepicker>
 
-        <b-form-invalid-feedback
-          id="input-1-live-feedback"
-        >This is a required field and must be at least 3 characters.</b-form-invalid-feedback>
-      </b-form-group>
+			        <b-form-invalid-feedback
+			          	id="defaultDate"
+			        >
+			    		This is a required field and must be at least 3 characters.
+			    	</b-form-invalid-feedback>
+			    </b-form-group>
 
-      <b-form-group id="example-input-group-2" label="Food" label-for="example-input-2">
-        <b-form-select
-          id="example-input-2"
-          name="example-input-2"
-          v-model="$v.form.food.$model"
-          :options="foods"
-          :state="validateState('food')"
-          aria-describedby="input-2-live-feedback"
-        ></b-form-select>
+			    <b-form-group id="example-input-group-2" label="Número" label-for="numero">
+			        <b-form-select
+			          	id="numero"
+			          	name="numero"
+			          	v-model="$v.form.numero.$model"
+			          	:options="numeros"
+			          	:state="validateState('numero')"
+			          	aria-describedby="numero"
+			        ></b-form-select>
+			        <b-form-invalid-feedback id="numero">This is a required field.</b-form-invalid-feedback>
+			    </b-form-group>
+			    <b-form-group id="example-input-group-2" label="Periodo Actual" label-for="periodo_actual">
+			        <b-form-checkbox
+				      	id="periodo_actual"
+				      	v-model="form.periodo_actual"
+				      	name="periodo_actual"
+				      	value="true"
+				      	unchecked-value="false"
+				    >
+				      	Marcar como périodo Actual				    
+				    </b-form-checkbox>
+			    </b-form-group>
 
-        <b-form-invalid-feedback id="input-2-live-feedback">This is a required field.</b-form-invalid-feedback>
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">Submit</b-button>
-      <b-button class="ml-2" @click="resetForm()">Reset</b-button>
-    </b-form>
+      			<b-button type="submit" variant="primary">Submit</b-button>
+      			<b-button class="ml-2" @click="resetForm()">Reset</b-button>
+    		</b-form>
 	    </b-modal>
 	</div>
 </template>
@@ -128,42 +142,29 @@
 				es: es,
 				title_modal: 'Registrar Periodo',
 				periodos:[],
-				anio:'',
-				numero:null,
-				defaultDate: new Date(),
-				periodo_actual: true,
-				name: '',
-        		nameState: null,
-        		submittedNames: [],
         		numeros: [
 		          { value: null, text: 'Please select an option' },
 		          { value: 'I', text: 'I' },
 		          { value: 'II', text: 'II' },
 		        ],
-		        foods: [
-			        { value: null, text: "Choose..." },
-			        { value: "apple", text: "Apple" },
-			        { value: "orange", text: "Orange" }
-			    ],
-			    form: {
-			        name: null,
-			        food: null
-			    }
-
+		        form:{
+		        	anio:null,
+		        	periodo_actual:null,
+		        	numero:null,
+		        	defaultDate: new Date()
+		        }
 			}
 		},
-
 		validations: {
 		    form: {
-		      food: {
-		        required
-		      },
-		      name: {
-		        required,
-		        minLength: minLength(3)
-		      }
+		      	defaultDate: {
+		        	required
+		      	},
+		      	numero: {
+		        	required,
+		      	}
 		    }
-		  },
+		},
 		methods:{
 			getPeriodos: function(){
 				axios.get('/periodos')
@@ -175,7 +176,7 @@
 			},
 			convertDate: function () {
 		      	// `this` points to the vm instance
-		      	this.anio =  this.defaultDate.getFullYear();
+		      	this.form.anio =  this.form.defaultDate.getFullYear();
 		    },
 		    savePeriodo(){
 		    	axios.post('/periodos',{
@@ -189,56 +190,38 @@
 					console.log(error);
 				});
 		    },
-		     checkFormValidity() {
-		        const valid = this.$refs.form.checkValidity()
-		        this.nameState = valid
-		        return valid
-		      },
-		      resetModal() {
+		 
+	       	validateState(name) {
+		      	const { $dirty, $error } = this.$v.form[name];
+		      	return $dirty ? !$error : null;
+		    },
+		    resetForm() {
+		      	this.form = {
+		        	name: null,
+		        	food: null
+		      	};
+
+		      	this.$nextTick(() => {
+		        	this.$v.$reset();
+		      	});
+		    },
+		    onSubmit() {
+		      	this.$v.form.$touch();
+		      	if (this.$v.form.$anyError) {
+		        	return;
+		      	}
+		      	alert("Form submitted!");
+		  	},
+		  	resetModal() {
 		        this.name = ''
 		        this.nameState = null
-		      },
-		      handleOk(bvModalEvt) {
+		    },
+		    handleOk(bvModalEvt) {
 		        // Prevent modal from closing
 		        bvModalEvt.preventDefault()
 		        // Trigger submit handler
 		        this.handleSubmit()
-		      },
-		      handleSubmit() {
-		        // Exit when the form isn't valid
-		        if (!this.checkFormValidity()) {
-		          return
-		        }
-		        // Push the name to submitted names
-		        this.submittedNames.push(this.name)
-		        // Hide the modal manually
-		        this.$nextTick(() => {
-		          this.$bvModal.hide('modal-prevent-closing')
-		        })
-		      },
-		       validateState(name) {
-			      const { $dirty, $error } = this.$v.form[name];
-			      return $dirty ? !$error : null;
-			    },
-			    resetForm() {
-			      this.form = {
-			        name: null,
-			        food: null
-			      };
-
-			      this.$nextTick(() => {
-			        this.$v.$reset();
-			      });
-			    },
-			    onSubmit() {
-			      this.$v.form.$touch();
-			      if (this.$v.form.$anyError) {
-			        return;
-			      }
-			      alert("Form submitted!");
-			  }
-
-			
+		    },
 		},
 	
 		mounted(){

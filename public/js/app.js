@@ -2062,6 +2062,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2074,13 +2088,6 @@ __webpack_require__.r(__webpack_exports__);
       es: vuejs_datepicker_dist_locale__WEBPACK_IMPORTED_MODULE_0__["es"],
       title_modal: 'Registrar Periodo',
       periodos: [],
-      anio: '',
-      numero: null,
-      defaultDate: new Date(),
-      periodo_actual: true,
-      name: '',
-      nameState: null,
-      submittedNames: [],
       numeros: [{
         value: null,
         text: 'Please select an option'
@@ -2091,30 +2098,21 @@ __webpack_require__.r(__webpack_exports__);
         value: 'II',
         text: 'II'
       }],
-      foods: [{
-        value: null,
-        text: "Choose..."
-      }, {
-        value: "apple",
-        text: "Apple"
-      }, {
-        value: "orange",
-        text: "Orange"
-      }],
       form: {
-        name: null,
-        food: null
+        anio: null,
+        periodo_actual: null,
+        numero: null,
+        defaultDate: new Date()
       }
     };
   },
   validations: {
     form: {
-      food: {
+      defaultDate: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__["required"]
       },
-      name: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__["required"],
-        minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__["minLength"])(3)
+      numero: {
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__["required"]
       }
     }
   },
@@ -2130,7 +2128,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     convertDate: function convertDate() {
       // `this` points to the vm instance
-      this.anio = this.defaultDate.getFullYear();
+      this.form.anio = this.form.defaultDate.getFullYear();
     },
     savePeriodo: function savePeriodo() {
       axios.post('/periodos', {
@@ -2143,36 +2141,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    checkFormValidity: function checkFormValidity() {
-      var valid = this.$refs.form.checkValidity();
-      this.nameState = valid;
-      return valid;
-    },
-    resetModal: function resetModal() {
-      this.name = '';
-      this.nameState = null;
-    },
-    handleOk: function handleOk(bvModalEvt) {
-      // Prevent modal from closing
-      bvModalEvt.preventDefault(); // Trigger submit handler
-
-      this.handleSubmit();
-    },
-    handleSubmit: function handleSubmit() {
-      var _this2 = this;
-
-      // Exit when the form isn't valid
-      if (!this.checkFormValidity()) {
-        return;
-      } // Push the name to submitted names
-
-
-      this.submittedNames.push(this.name); // Hide the modal manually
-
-      this.$nextTick(function () {
-        _this2.$bvModal.hide('modal-prevent-closing');
-      });
-    },
     validateState: function validateState(name) {
       var _this$$v$form$name = this.$v.form[name],
           $dirty = _this$$v$form$name.$dirty,
@@ -2180,14 +2148,14 @@ __webpack_require__.r(__webpack_exports__);
       return $dirty ? !$error : null;
     },
     resetForm: function resetForm() {
-      var _this3 = this;
+      var _this2 = this;
 
       this.form = {
         name: null,
         food: null
       };
       this.$nextTick(function () {
-        _this3.$v.$reset();
+        _this2.$v.$reset();
       });
     },
     onSubmit: function onSubmit() {
@@ -2198,6 +2166,16 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       alert("Form submitted!");
+    },
+    resetModal: function resetModal() {
+      this.name = '';
+      this.nameState = null;
+    },
+    handleOk: function handleOk(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault(); // Trigger submit handler
+
+      this.handleSubmit();
     }
   },
   mounted: function mounted() {
@@ -76127,30 +76105,30 @@ var render = function() {
           { staticClass: "card-body" },
           [
             _c(
-              "button",
-              {
-                staticClass: "btn btn-primary float-right mb-3",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "modal",
-                  "data-target": "#exampleModal"
-                }
-              },
-              [_vm._v("\n\t\t\t\t  \tAgregar Periodo\n\t\t\t\t")]
-            ),
-            _vm._v(" "),
-            _c(
-              "b-button",
-              {
-                directives: [
-                  {
-                    name: "b-modal",
-                    rawName: "v-b-modal.modal-prevent-closing",
-                    modifiers: { "modal-prevent-closing": true }
-                  }
-                ]
-              },
-              [_vm._v("Launch demo modal")]
+              "b-row",
+              { staticClass: "mb-2" },
+              [
+                _c(
+                  "b-col",
+                  [
+                    _c(
+                      "b-button",
+                      {
+                        directives: [
+                          {
+                            name: "b-modal",
+                            rawName: "v-b-modal.modal-prevent-closing",
+                            modifiers: { "modal-prevent-closing": true }
+                          }
+                        ]
+                      },
+                      [_vm._v("Agregar Périodo")]
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
             ),
             _vm._v(" "),
             _c("table", { staticClass: "table table-bordered" }, [
@@ -76186,176 +76164,6 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c(
-        "div",
-        {
-          staticClass: "modal fade",
-          attrs: {
-            id: "exampleModal",
-            tabindex: "-1",
-            role: "dialog",
-            "aria-labelledby": "exampleModalLabel",
-            "aria-hidden": "true"
-          }
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "modal-dialog", attrs: { role: "document" } },
-            [
-              _c("div", { staticClass: "modal-content" }, [
-                _c("div", { staticClass: "modal-header" }, [
-                  _c("h5", {
-                    staticClass: "modal-title",
-                    attrs: { id: "exampleModalLabel" },
-                    domProps: { textContent: _vm._s(_vm.title_modal) }
-                  }),
-                  _vm._v(" "),
-                  _vm._m(1)
-                ]),
-                _vm._v(" "),
-                _c(
-                  "form",
-                  {
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                        return _vm.savePeriodo($event)
-                      }
-                    }
-                  },
-                  [
-                    _c("div", { staticClass: "modal-body" }, [
-                      _c(
-                        "div",
-                        { staticClass: "form-group" },
-                        [
-                          _c("label", { attrs: { for: "" } }, [_vm._v("Año:")]),
-                          _vm._v(" "),
-                          _c("datepicker", {
-                            attrs: {
-                              language: _vm.es,
-                              format: _vm.DatePickerFormat,
-                              "minimum-view": "year",
-                              "bootstrap-styling": true
-                            },
-                            on: { closed: _vm.convertDate },
-                            model: {
-                              value: _vm.defaultDate,
-                              callback: function($$v) {
-                                _vm.defaultDate = $$v
-                              },
-                              expression: "defaultDate"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "form-group" }, [
-                        _c("label", { attrs: { for: "" } }, [
-                          _vm._v("Número:")
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "select",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.numero,
-                                expression: "numero"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: { id: "numero", required: "required" },
-                            on: {
-                              change: function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.numero = $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              }
-                            }
-                          },
-                          [
-                            _c("option", { attrs: { value: "I" } }, [
-                              _vm._v("I")
-                            ]),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "II" } }, [
-                              _vm._v("II")
-                            ])
-                          ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "form-group" }, [
-                        _c("label", { staticClass: "checkbox-inline" }, [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.periodo_actual,
-                                expression: "periodo_actual"
-                              }
-                            ],
-                            attrs: {
-                              type: "checkbox",
-                              "true-value": true,
-                              "false-value": false
-                            },
-                            domProps: {
-                              checked: Array.isArray(_vm.periodo_actual)
-                                ? _vm._i(_vm.periodo_actual, null) > -1
-                                : _vm.periodo_actual
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$a = _vm.periodo_actual,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = null,
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      (_vm.periodo_actual = $$a.concat([$$v]))
-                                  } else {
-                                    $$i > -1 &&
-                                      (_vm.periodo_actual = $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1)))
-                                  }
-                                } else {
-                                  _vm.periodo_actual = $$c
-                                }
-                              }
-                            }
-                          }),
-                          _vm._v("Marcar como Activo")
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(2)
-                  ]
-                )
-              ])
-            ]
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
         "b-modal",
         {
           ref: "modal",
@@ -76384,33 +76192,36 @@ var render = function() {
                 {
                   attrs: {
                     id: "example-input-group-1",
-                    label: "Name",
+                    label: "Año",
                     "label-for": "example-input-1"
                   }
                 },
                 [
-                  _c("b-form-input", {
+                  _c("datepicker", {
                     attrs: {
-                      id: "example-input-1",
-                      name: "example-input-1",
-                      state: _vm.validateState("name"),
-                      "aria-describedby": "input-1-live-feedback"
+                      language: _vm.es,
+                      format: _vm.DatePickerFormat,
+                      "minimum-view": "year",
+                      "bootstrap-styling": true,
+                      state: _vm.validateState("defaultDate"),
+                      "aria-describedby": "defaultDate"
                     },
+                    on: { closed: _vm.convertDate },
                     model: {
-                      value: _vm.$v.form.name.$model,
+                      value: _vm.form.defaultDate,
                       callback: function($$v) {
-                        _vm.$set(_vm.$v.form.name, "$model", $$v)
+                        _vm.$set(_vm.form, "defaultDate", $$v)
                       },
-                      expression: "$v.form.name.$model"
+                      expression: "form.defaultDate"
                     }
                   }),
                   _vm._v(" "),
                   _c(
                     "b-form-invalid-feedback",
-                    { attrs: { id: "input-1-live-feedback" } },
+                    { attrs: { id: "defaultDate" } },
                     [
                       _vm._v(
-                        "This is a required field and must be at least 3 characters."
+                        "\n\t\t\t    \t\tThis is a required field and must be at least 3 characters.\n\t\t\t    \t"
                       )
                     ]
                   )
@@ -76423,32 +76234,67 @@ var render = function() {
                 {
                   attrs: {
                     id: "example-input-group-2",
-                    label: "Food",
-                    "label-for": "example-input-2"
+                    label: "Número",
+                    "label-for": "numero"
                   }
                 },
                 [
                   _c("b-form-select", {
                     attrs: {
-                      id: "example-input-2",
-                      name: "example-input-2",
-                      options: _vm.foods,
-                      state: _vm.validateState("food"),
-                      "aria-describedby": "input-2-live-feedback"
+                      id: "numero",
+                      name: "numero",
+                      options: _vm.numeros,
+                      state: _vm.validateState("numero"),
+                      "aria-describedby": "numero"
                     },
                     model: {
-                      value: _vm.$v.form.food.$model,
+                      value: _vm.$v.form.numero.$model,
                       callback: function($$v) {
-                        _vm.$set(_vm.$v.form.food, "$model", $$v)
+                        _vm.$set(_vm.$v.form.numero, "$model", $$v)
                       },
-                      expression: "$v.form.food.$model"
+                      expression: "$v.form.numero.$model"
                     }
                   }),
                   _vm._v(" "),
+                  _c("b-form-invalid-feedback", { attrs: { id: "numero" } }, [
+                    _vm._v("This is a required field.")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-form-group",
+                {
+                  attrs: {
+                    id: "example-input-group-2",
+                    label: "Periodo Actual",
+                    "label-for": "periodo_actual"
+                  }
+                },
+                [
                   _c(
-                    "b-form-invalid-feedback",
-                    { attrs: { id: "input-2-live-feedback" } },
-                    [_vm._v("This is a required field.")]
+                    "b-form-checkbox",
+                    {
+                      attrs: {
+                        id: "periodo_actual",
+                        name: "periodo_actual",
+                        value: "true",
+                        "unchecked-value": "false"
+                      },
+                      model: {
+                        value: _vm.form.periodo_actual,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "periodo_actual", $$v)
+                        },
+                        expression: "form.periodo_actual"
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n\t\t\t\t      \tMarcar como périodo Actual\t\t\t\t    \n\t\t\t\t    "
+                      )
+                    ]
                   )
                 ],
                 1
@@ -76495,44 +76341,6 @@ var staticRenderFns = [
       _c("th", [_vm._v("Periodo Actual")]),
       _vm._v(" "),
       _c("th", [_vm._v("Acciones")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "close",
-        attrs: {
-          type: "button",
-          "data-dismiss": "modal",
-          "aria-label": "Close"
-        }
-      },
-      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-secondary",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Cerrar")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-        [_vm._v("Guardar")]
-      )
     ])
   }
 ]
@@ -96385,8 +96193,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\notas-laravel\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\notas-laravel\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp2\htdocs\notas-laravel-\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp2\htdocs\notas-laravel-\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
